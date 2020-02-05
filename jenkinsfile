@@ -1,33 +1,24 @@
 pipeline {
     agent none
     environment {
-        DOCKER_REGISTRY = "https://poznajkubernetes.azurecr.io"
+        DOCKER_REGISTRY = "poznajkubernetes.azurecr.io"
         IMAGE_NAME = "pkad_jenkins"
-        IMAGE_TAG = "${env.BRANCH_NAME}_${BUILD_ID}"
+        IMAGE_TAG = "null_13" //"${env.BRANCH_NAME}_${BUILD_ID}"
+        CI_APP_NAME = "pkad_jenkins"
     }
     stages {
-        stage('build') {
+        /*stage('build') {
             agent { node { label 'docker' }}
             steps{
-                /*withCredentials([
-                    usernamePassword(
-                        credentialsId: "docker_registry_credentials",
-                        usernameVariable: 'REGISTRY_USER',
-                        passwordVariable: 'REGISTRY_PASSWORD')]){
-                    sh 'echo "$REGISTRY_PASSWORD" | docker login -u REGISTRY_USER --password-stdin $DOCKER_REGISTRY'
-                    sh 'docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $DOCKER_REGISTRY'
-                    sh "docker build -t $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG ."
-                    sh "docker push $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG"
-                }*/
                 script{
-                    docker.withRegistry("${DOCKER_REGISTRY}", 'docker_registry_credentials') {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'docker_registry_credentials') {
                         def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                         // Push thecontainer to the custom Registry
                         customImage.push()
                     }
                 }
             }
-        }
+        }*/
         stage('List pods') {
             agent {
                 docker {
@@ -38,6 +29,8 @@ pipeline {
             steps{
                 withKubeConfig(credentialsId: 'jenkins-kubeconfig', namespace: 'default') {
                     sh 'ls'
+                    sh 'envsubst < deployment/deployment-template.yaml > deployment/deployment.yaml'
+                    sh 'cat deployment/deployment.yaml'
                     sh 'kubectl get pods'
                 }
             }
