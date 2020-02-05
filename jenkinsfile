@@ -28,10 +28,23 @@ pipeline {
             }
             steps{
                 withKubeConfig(credentialsId: 'jenkins-kubeconfig', namespace: 'default') {
-                    sh 'ls'
-                    sh 'envsubst < deployment/deployment-template.yaml > deployment/deployment.yaml'
-                    sh 'cat deployment/deployment.yaml'
-                    sh 'kubectl get pods'
+                    withCredentials([usernamePassword(
+                            credentialsId: "docker_registry_credentials",
+                            usernameVariable: 'DOCKER_USER',
+                            passwordVariable: 'DOCKER_PASSWORD')]){
+
+                        sh 'KUBECTL_NAMESPACE="ingress-basic"'
+
+                        sh 'kubectl create secret docker-registry jenkins-registry
+                                --docker-server=$DOCKER_REGISTRY
+                                --docker-username=$DOCKER_USER
+                                --docker-password=$DOCKER_PASSWORD
+                                -o yaml --dry-run | kubectl apply -f -'
+
+                        sh 'envsubst < deployment/deployment-template.yaml > deployment/deployment.yaml'
+                        sh 'cat deployment/deployment.yaml'
+                        sh 'kubectl get pods'
+                    }
                 }
             }
         }
