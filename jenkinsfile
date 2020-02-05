@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        DOCKER_REGISTRY = "poznajkubernetes.azurecr.io"
+        DOCKER_REGISTRY = "https://poznajkubernetes.azurecr.io"
         IMAGE_NAME = "pkad_jenkins"
         IMAGE_TAG = "${env.BRANCH_NAME}_${BUILD_ID}"
     }
