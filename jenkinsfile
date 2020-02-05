@@ -9,7 +9,7 @@ pipeline {
         stage('List pods') {
             steps{
                 withKubeConfig(credentialsId: 'jenkins-kubeconfig', namespace: 'default') {
-                    sh 'cat $KUBECONFIG'
+                    sh 'ls'
                     sh 'kubectl get pods'
                 }
             }
