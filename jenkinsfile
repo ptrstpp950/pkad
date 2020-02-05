@@ -2,7 +2,7 @@ pipeline {
     agent none
     stages {
         stage('build') {
-            agent { node{} }
+            agent { node { label 'docker' }}
             steps{
                 sh 'ls'
                 sh 'docker ps'
