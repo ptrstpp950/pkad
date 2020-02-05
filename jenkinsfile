@@ -36,10 +36,10 @@ pipeline {
                         sh 'KUBECTL_NAMESPACE="ingress-basic"'
 
                         sh '''
-                        kubectl create secret docker-registry jenkins-registry
-                                --docker-server=$DOCKER_REGISTRY
-                                --docker-username=$DOCKER_USER
-                                --docker-password=$DOCKER_PASSWORD
+                        kubectl create secret docker-registry jenkins-registry \
+                                --docker-server=$DOCKER_REGISTRY \
+                                --docker-username=$DOCKER_USER \
+                                --docker-password=$DOCKER_PASSWORD \
                                 -o yaml --dry-run | kubectl apply -f -
                         '''
 
