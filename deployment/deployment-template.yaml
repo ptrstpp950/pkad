@@ -27,7 +27,7 @@ spec:
         app: $CI_APP_NAME
     spec:
       imagePullSecrets:
-      - name: docker-registry
+      - name: jenkins-registry
       containers:
       - name: $CI_APP_NAME
         image: $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
