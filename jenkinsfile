@@ -4,7 +4,7 @@ pipeline {
         DOCKER_REGISTRY = "poznajkubernetes.azurecr.io"
         IMAGE_NAME = "pkad_jenkins"
         IMAGE_TAG = "master_${BUILD_ID}"
-        CI_APP_NAME = "pkad_jenkins"
+        CI_APP_NAME = "pkad-jenkins"
         KUBECTL_NAMESPACE="ingress-basic"
     }
     stages {
