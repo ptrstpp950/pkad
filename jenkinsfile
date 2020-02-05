@@ -19,10 +19,12 @@ pipeline {
                     sh "docker build -t $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG ."
                     sh "docker push $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG"
                 }*/
-                docker.withRegistry("${DOCKER_REGISTRY}", 'docker_registry_credentials') {
-                    def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                    /* Push thecontainer to the custom Registry */
-                    customImage.push()
+                script{
+                    docker.withRegistry("${DOCKER_REGISTRY}", 'docker_registry_credentials') {
+                        def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                        /* Push thecontainer to the custom Registry */
+                        customImage.push()
+                    }
                 }
             }
         }
