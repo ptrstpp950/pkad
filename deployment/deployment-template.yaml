@@ -27,10 +27,10 @@ spec:
         app: $CI_APP_NAME
     spec:
       imagePullSecrets:
-      - name: gitlab-registry
+      - name: docker-registry
       containers:
       - name: $CI_APP_NAME
-        image: $CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE_TAG
+        image: $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
         ports:
         - containerPort: 8080
 ---
