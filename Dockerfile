@@ -31,7 +31,7 @@ ENV VERSION=${VERSION_NAME}
 
 
 # Do the build. Script is part of incoming sources.
-RUN build/build-with-cache.sh
+RUN chmod +x build/build-with-cache.sh && build/build-with-cache.sh
 
 # STAGE 2: Runtime
 FROM alpine
