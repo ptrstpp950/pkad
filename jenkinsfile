@@ -1,11 +1,23 @@
 pipeline {
     agent none
+    environment {
+        DOCKER_REGISTRY = "poznajkubernetes.azurecr.io"
+        IMAGE_NAME = "pkad_jenkins"
+        IMAGE_TAG = "${env.BRANCH_NAME}_${BUILD_ID}"
+    }
     stages {
         stage('build') {
             agent { node { label 'docker' }}
             steps{
-                sh 'ls'
-                sh 'docker ps'
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: "docker_registry_credentials",
+                        usernameVariable: 'REGISTRY_USER',
+                        passwordVariable: 'REGISTRY_PASSWORD')]){
+                    sh 'docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $DOCKER_REGISTRY'
+                    sh "docker build -t $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG ."
+                    sh "docker push $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG"
+                }
             }
         }
         stage('List pods') {
