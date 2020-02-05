@@ -14,7 +14,8 @@ pipeline {
                         credentialsId: "docker_registry_credentials",
                         usernameVariable: 'REGISTRY_USER',
                         passwordVariable: 'REGISTRY_PASSWORD')]){
-                    sh 'docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $DOCKER_REGISTRY'
+                    sh 'echo "$REGISTRY_PASSWORD" | docker login -u REGISTRY_USER --password-stdin $DOCKER_REGISTRY'
+                    //sh 'docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $DOCKER_REGISTRY'
                     sh "docker build -t $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG ."
                     sh "docker push $REGISTRY/${IMAGE_NAME}:$IMAGE_TAG"
                 }
