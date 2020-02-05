@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = "pkad_jenkins"
         IMAGE_TAG = "master_${BUILD_ID}"
         CI_APP_NAME = "pkad-jenkins"
-        KUBECTL_NAMESPACE="ingress-basic"
+        KUBECTL_NAMESPACE="jenkins-deploy"
     }
     stages {
         stage('build') {
