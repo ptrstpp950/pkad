@@ -5,6 +5,7 @@ pipeline {
         IMAGE_NAME = "pkad_jenkins"
         IMAGE_TAG = "null_13" //"${env.BRANCH_NAME}_${BUILD_ID}"
         CI_APP_NAME = "pkad_jenkins"
+        KUBECTL_NAMESPACE="ingress-basic"
     }
     stages {
         /*stage('build') {
@@ -32,9 +33,8 @@ pipeline {
                             credentialsId: "docker_registry_credentials",
                             usernameVariable: 'DOCKER_USER',
                             passwordVariable: 'DOCKER_PASSWORD')]){
-
+                        sh 'kubectl config set-context $(kubectl config current-context) --namespace=$KUBECTL_NAMESPACE'
                         sh '''
-                        export KUBECTL_NAMESPACE="ingress-basic"
                         kubectl create secret docker-registry jenkins-registry \
                                 --docker-server=$DOCKER_REGISTRY \
                                 --docker-username=$DOCKER_USER \
