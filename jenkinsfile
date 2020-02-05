@@ -1,0 +1,18 @@
+pipeline {
+    agent {
+        docker { 
+            image 'poznajkubernetes/kubectl:v1.14'
+            args '-v /tmp:/tmp --entrypoint='
+        }
+    }
+    stages {
+        stage('List pods') {
+            steps{
+                withKubeConfig(credentialsId: 'jenkins-kubeconfig', namespace: 'default') {
+                    sh 'cat $KUBECONFIG'
+                    sh 'kubectl get pods'
+                }
+            }
+        }
+    }
+}
